@@ -38,7 +38,11 @@ func (s *FileStorage) Save(ctx context.Context, note *domain.Note) (*domain.Note
 	filename := fmt.Sprintf("%s.md", note.ID.String())
 	path := filepath.Join(s.root, filename)
 
-	if err := os.WriteFile(path, []byte(note.Content), 0664); err != nil {
+	content, err := makeFileNoteContent(note)
+	if err != nil {
+		return nil, err
+	}
+	if err := os.WriteFile(path, content, 0664); err != nil {
 		return nil, err
 	}
 	return note, nil
@@ -60,8 +64,10 @@ func (s *FileStorage) Get(ctx context.Context, id uuid.UUID) (*domain.Note, erro
 				return nil, fmt.Errorf("unable to open note %s", id.String())
 			}
 
-			// TODO: parse note content
-			note := domain.DefaultNote().WithID(id).WithContent(string(b))
+			note, err := parseFileNote(b, id)
+			if err != nil {
+				return nil, err
+			}
 			return note, nil
 		}
 	}
@@ -101,10 +107,11 @@ func (s *FileStorage) List(ctx context.Context, query string) ([]*domain.Note, e
 			return nil, fmt.Errorf("unable to open note %s", file.Name())
 		}
 
-		// TODO: parse note content
-		note := domain.DefaultNote().
-			WithID(uuid.MustParse(strings.TrimSuffix(file.Name(), filepath.Ext(file.Name())))).
-			WithContent(string(b))
+		id := uuid.MustParse(strings.TrimSuffix(file.Name(), filepath.Ext(file.Name())))
+		note, err := parseFileNote(b, id)
+		if err != nil {
+			return nil, err
+		}
 		notes = append(notes, note)
 	}
 

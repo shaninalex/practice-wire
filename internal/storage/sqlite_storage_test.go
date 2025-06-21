@@ -8,21 +8,20 @@ import (
 	"github.com/google/uuid"
 	"github.com/shaninalex/practice-wire/internal/domain"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 )
 
 func Test_SqliteStorage_CRUD(t *testing.T) {
 	tmpFile := filepath.Join(t.TempDir(), "test.db")
 	storage, err := NewSqliteStorage(tmpFile)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	note := &domain.Note{Title: "Hello", Content: "World"}
 	saved, err := storage.Save(context.Background(), note)
-	require.NoError(t, err)
-	require.NotZero(t, saved.ID)
+	assert.NoError(t, err)
+	assert.NotZero(t, saved.ID)
 
 	got, err := storage.Get(context.Background(), saved.ID)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, saved.Title, got.Title)
 }
 
@@ -30,7 +29,7 @@ func Test_SqliteStorage_Remove(t *testing.T) {
 	ctx := context.Background()
 	tmpFile := filepath.Join(t.TempDir(), "test.db")
 	storage, err := NewSqliteStorage(tmpFile)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	note := &domain.Note{ID: uuid.New(), Title: "Hello", Content: "World"}
 	_, _ = storage.Save(ctx, note)
@@ -46,7 +45,7 @@ func Test_SqliteStorage_List(t *testing.T) {
 	ctx := context.Background()
 	tmpFile := filepath.Join(t.TempDir(), "test.db")
 	storage, err := NewSqliteStorage(tmpFile)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
 	expected := map[uuid.UUID]*domain.Note{
 		uuid.New(): {Title: "Hello 1", Content: "World 1"},
@@ -57,12 +56,12 @@ func Test_SqliteStorage_List(t *testing.T) {
 	for id, note := range expected {
 		note.ID = id
 		_, err := storage.Save(ctx, note)
-		require.NoError(t, err)
+		assert.NoError(t, err)
 	}
 
 	savedNotes, err := storage.List(ctx, "")
-	require.NoError(t, err)
-	require.Len(t, savedNotes, len(expected))
+	assert.NoError(t, err)
+	assert.Len(t, savedNotes, len(expected))
 
 	for _, sn := range savedNotes {
 		expectedNote, ok := expected[sn.ID]

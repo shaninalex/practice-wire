@@ -39,17 +39,6 @@ func (note *Note) WithUpdatedAt(updatedAt time.Time) *Note {
 	return note
 }
 
-// Parse - content string in format:
-//
-// title: "Note Title"
-// created_at: 18-10-2025 11:45:20
-// updated_at: 19-10-2025 12:35:20
-// ---
-// content goes here
-func (note *Note) Parse(fileContent string) *Note {
-	panic("implement me")
-}
-
 func (note *Note) Build() Note {
 	return *note
 }
