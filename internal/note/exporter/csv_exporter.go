@@ -17,6 +17,6 @@ type CSVExporter struct {
 	storage domain.IStorage
 }
 
-func (s *CSVExporter) Export(ctx context.Context) (string, error) {
+func (s *CSVExporter) Export(ctx context.Context, destination string) (string, error) {
 	return "", nil
 }

@@ -19,6 +19,6 @@ type XMLExporter struct {
 	storage domain.IStorage
 }
 
-func (s *XMLExporter) Export(ctx context.Context) (string, error) {
+func (s *XMLExporter) Export(ctx context.Context, destination string) (string, error) {
 	return "", nil
 }

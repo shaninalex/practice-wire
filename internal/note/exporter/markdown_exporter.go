@@ -19,6 +19,6 @@ type MarkdownExporter struct {
 	storage domain.IStorage
 }
 
-func (s *MarkdownExporter) Export(ctx context.Context) (string, error) {
+func (s *MarkdownExporter) Export(ctx context.Context, destination string) (string, error) {
 	return "", nil
 }

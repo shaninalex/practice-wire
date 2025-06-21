@@ -2,6 +2,9 @@ package exporter
 
 import (
 	"context"
+	"encoding/json"
+	"os"
+	"path/filepath"
 
 	"github.com/shaninalex/practice-wire/internal/domain"
 )
@@ -19,6 +22,18 @@ type JSONExporter struct {
 	storage domain.IStorage
 }
 
-func (s *JSONExporter) Export(ctx context.Context) (string, error) {
-	return "", nil
+func (s *JSONExporter) Export(ctx context.Context, destination string) (string, error) {
+	notes, err := s.storage.List(ctx, "")
+	if err != nil {
+		return "", nil
+	}
+	b, err := json.Marshal(notes)
+	if err != nil {
+		return "", nil
+	}
+	path := filepath.Join(destination, "backup.json")
+	if err := os.WriteFile(path, b, 0664); err != nil {
+		return "", err
+	}
+	return path, nil
 }

@@ -2,12 +2,14 @@ package domain
 
 import (
 	"context"
+
+	"github.com/google/uuid"
 )
 
 type INoteService interface {
 	Save(ctx context.Context, title, content string) (*Note, error)
-	Get(ctx context.Context, id int64) (*Note, error)
-	Delete(ctx context.Context, id int64) error
+	Get(ctx context.Context, id uuid.UUID) (*Note, error)
+	Delete(ctx context.Context, id uuid.UUID) error
 	List(ctx context.Context, query string) ([]*Note, error)
 	Export(cxt context.Context, format ExportFormat, destination string) error
 }

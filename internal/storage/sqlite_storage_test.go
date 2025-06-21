@@ -11,16 +11,17 @@ import (
 )
 
 func Test_SqliteStorage_CRUD(t *testing.T) {
+	ctx := context.Background()
 	tmpFile := filepath.Join(t.TempDir(), "test.db")
 	storage, err := NewSqliteStorage(tmpFile)
 	assert.NoError(t, err)
 
 	note := &domain.Note{Title: "Hello", Content: "World"}
-	saved, err := storage.Save(context.Background(), note)
+	saved, err := storage.Save(ctx, note)
 	assert.NoError(t, err)
 	assert.NotZero(t, saved.ID)
 
-	got, err := storage.Get(context.Background(), saved.ID)
+	got, err := storage.Get(ctx, saved.ID)
 	assert.NoError(t, err)
 	assert.Equal(t, saved.Title, got.Title)
 }

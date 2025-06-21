@@ -2,8 +2,10 @@ package note
 
 import (
 	"context"
-	"github.com/shaninalex/practice-wire/internal/domain"
 	"time"
+
+	"github.com/google/uuid"
+	"github.com/shaninalex/practice-wire/internal/domain"
 )
 
 type NoteService struct {
@@ -19,11 +21,11 @@ func (s *NoteService) Save(ctx context.Context, title, content string) (*domain.
 	return s.storage.Save(ctx, &note)
 }
 
-func (s *NoteService) Get(ctx context.Context, id int64) (*domain.Note, error) {
+func (s *NoteService) Get(ctx context.Context, id uuid.UUID) (*domain.Note, error) {
 	return s.storage.Get(ctx, id)
 }
 
-func (s *NoteService) Delete(ctx context.Context, id int64) error {
+func (s *NoteService) Delete(ctx context.Context, id uuid.UUID) error {
 	return s.storage.Delete(ctx, id)
 }
 
