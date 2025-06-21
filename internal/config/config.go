@@ -12,7 +12,7 @@ func NewConfig() *Config {
 	return &Config{}
 }
 
-func (c *Config) RootPath() string {
+func (c *Config) ConfigPath() string {
 	home, err := os.UserHomeDir()
 	if err != nil {
 		panic(err)
